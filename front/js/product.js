@@ -17,6 +17,8 @@ fetch ("http://localhost:3000/api/products/" + productId)
 .catch((error) => {
     window.alert("Une erreur s'est produite, merci de recharger la page.");
 });
+// call the function for the local store
+storeInLocal();
 
 function displayProductId(product) {
 // change the <title> of the page
@@ -69,12 +71,33 @@ function storeInLocal() {
             return;
 //  then, an array with the customer's selection
         } else {
-            var customSelect = {
+            window.alert("Votre sélection a bien été ajouté à votre panier.");
+            var custSelect = {
                 id: productId,
                 color: colorV,
                 quantity: quantityV,
             };
+// values and key in the local storage + conversion JSON (in local storage) to JS
+            var cart = JSON.parse(localStorage.getItem("product"));
+// if there's no product in the local storage
+            if (cart === null) {
+                cart = [];
+                cart.push(custSelect);
+                localStorage.setItem("product", JSON.stringify(cart));
+// else, find out if the product is already present in the cart
+            } else {
+                var foundProduct = cart.find(p => p.id == custSelect.id && p.color == custSelect.color);
+// if the product is in the cart, add the customer's selection to the cart's quantity (parseInt to transform string in value)
+                if (foundProduct != undefined) {
+                    var newQuantity = parseInt(custSelect.quantity) + parseInt(foundProduct.quantity);
+                    foundProduct.quantity = newQuantity;
+                    localStorage.setItem("product", JSON.stringify(cart));
+// else, just push the selection
+                } else {
+                    cart.push(custSelect);
+                    localStorage.setItem("product", JSON.stringify(cart));
+                }
+            }
+        }
     })
 };
-
-storeInLocal();

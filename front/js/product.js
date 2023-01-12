@@ -58,7 +58,7 @@ function storeInLocal() {
             window.alert("Merci de choisir une couleur.");
             return;
 // check if a quantity is chosen
-        } else if (quantityV === 0) {
+        } else if (quantityV == 0) {
             window.alert("Merci de choisir une quantité.");
             return;
 // check if the quantity isn't negative
